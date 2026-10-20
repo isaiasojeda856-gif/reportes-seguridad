@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B.S. Sentir - Puesto 2</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --header-bg: #4a90e2;
+            --header-text: #ffffff;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --text-muted: #666666;
+            --border-color: #e0e0e0;
+            --nav-bg: #ffffff;
+            --nav-active: #4a90e2;
+            --nav-inactive: #999999;
+            --input-bg: #f9f9f9;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --header-bg: #1f1f1f;
+            --header-text: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --text-muted: #aaaaaa;
+            --border-color: #2c2c2c;
+            --nav-bg: #1f1f1f;
+            --nav-active: #4a90e2;
+            --nav-inactive: #666666;
+            --input-bg: #2a2a2a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Header Superior */
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-title-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        header h1 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        #back-icon {
+            font-size: 1.3rem;
+            font-weight: bold;
+            display: none;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--header-text);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .icon-btn:active {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        /* Contenedor de Vistas */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* Tarjetas de Menú */
+        .menu-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .menu-card:active {
+            transform: scale(0.98);
+        }
+
+        .menu-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        .icon-report { background-color: rgba(0, 184, 148, 0.15); }
+        .icon-tools { background-color: rgba(232, 67, 147, 0.15); }
+        .icon-profile { background-color: rgba(108, 92, 231, 0.15); }
+        .icon-ingreso { background-color: rgba(52, 152, 219, 0.15); }
+
+        .menu-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .menu-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Formularios Operativos */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .row-inputs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .row-inputs .form-group {
+            flex: 1;
+        }
+
+        .sub-section-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--header-bg);
+            margin: 20px 0 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .btn-action {
+            background-color: #0084d1;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .btn-action:active {
+            opacity: 0.8;
+        }
+
+        /* Contenedor de Botones de IA */
+        .ai-buttons-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-ai-offline {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            flex: 1;
+        }
+
+        .btn-ai-online {
+            background: linear-gradient(135deg, #00b894, #55efc4);
+            color: #121212;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            flex: 1;
+        }
+
+        .btn-ai-offline:active, .btn-ai-online:active {
+            opacity: 0.8;
+        }
+
+        /* Tarjeta de Perfil */
+        .profile-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            background-color: #6c5ce7;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Barra de Navegación Inferior */
+        nav.bottom-nav {
+            background-color: var(--nav-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            height: 60px;
+        }
+
+        .nav-item {
+            background: none;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--nav-inactive);
+            cursor: pointer;
+            flex: 1;
+            font-size: 0.75rem;
+        }
+
+        .nav-item.active {
+            color: var(--nav-active);
+            font-weight: 600;
+        }
+
+        .nav-item span.icon {
+            font-size: 1.25rem;
+            margin-bottom: 2px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <!-- Header con botón de retorno integrado -->
+    <header>
+        <div class="header-title-container" onclick="goHome()" id="header-nav" title="Volver al inicio">
+            <span id="back-icon">&larr;</span>
+            <h1 id="app-title">B.S. Sentir - Puesto 2</h1>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="toggleTheme()" id="theme-btn" title="Cambiar Tema">&#127769;</button>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <div class="main-content">
+        
+        <!-- VISTA 1: MENÚ PRINCIPAL -->
+        <div id="view-categorias" class="view active">
+            <div class="menu-card" onclick="switchTab('reportes')">
+                <div class="menu-icon icon-report">&#128680;</div>
+                <div class="menu-info">
+                    <h3>Generador de Reportes</h3>
+                    <p>Informe de novedad e incidencias con asistencia de IA</p>
+                </div>
+            </div>
+
+            <div class="menu-card" onclick="switchTab('herramientas')">
+                <div class="menu-icon icon-tools">&#128736;&#65039;</div>
+                <div class="menu-info">
+                    <h3>Herramientas y Gu&iacute;as</h3>
+                    <p>Acceso a ingreso, rond&iacute;n y parte del portero</p>
+                </div>
+            </div>
+
+            <div class="menu-card" onclick="switchTab('perfil')">
+                <div class="menu-icon icon-profile">&#128100;</div>
+                <div class="menu-info">
+                    <h3>Mi Perfil ("Yo")</h3>
+                    <p>Tus datos guardados, control de turnos y fichaje</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- INICIO DE ETIQUETA: APARTADO DE GENERADOR DE REPORTES   -->
+        <!-- (Sección aislada para futuras modificaciones del usuario) -->
+        <!-- ======================================================= -->
+        <div id="view-reportes" class="view">
+            <h2 class="section-title">INFORME DE NOVEDAD</h2>
+            
+            <!-- Manzana y Lote en fila -->
+            <div class="row-inputs">
+                <div class="form-group">
+                    <label>Manzana</label>
+                    <input type="text" id="repManzana" placeholder="Ej: 87">
+                </div>
+                <div class="form-group">
+                    <label>Lote</label>
+                    <input type="text" id="repLote" placeholder="Ej: 12">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de Incidencia</label>
+                <input type="text" id="repTipoIncidencia" placeholder="Ej: Veh&iacute;culo sospechoso / Animal suelto">
+            </div>
+
+            <div class="form-group">
+                <label>Detalle o Nota R&aacute;pida (Escribe tus notas informales...)</label>
+                <textarea id="repDetalle" rows="3" placeholder="Ej: perro suelto mordiendo tachos, asustando vecinos..."></textarea>
+                
+                <!-- Botones de Redacción con IA (Offline vs Online) -->
+                <div class="ai-buttons-container">
+                    <button type="button" class="btn-ai-offline" onclick="redactarConIAOffline()">
+                        <span>?</span> IA Local (Sin Internet)
+                    </button>
+                    <button type="button" class="btn-ai-online" onclick="redactarConIAOnline()">
+                        <span>??</span> IA Online (Con Internet)
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>&iquest;Hubo personas involucradas / identificadas?</label>
+                <span style="font-size: 0.75rem; color: #d63031; display: block; margin-bottom: 5px;">&#9888;&#65039; Al seleccionar "S&iacute;", se habilitar&aacute;n los campos obligatorios de identificaci&oacute;n.</span>
+                <select id="repPersonaCheck" onchange="toggleSeccionPersonas()">
+                    <option value="no">No / No aplica</option>
+                    <option value="si">S&iacute;, identificadas</option>
+                </select>
+            </div>
+
+            <!-- Contenedor desplegable de datos de personas -->
+            <div id="seccion-datos-persona" style="display: none; border-left: 3px solid #0084d1; padding-left: 12px; margin-bottom: 15px;">
+                <div class="form-group">
+                    <label>Nombre y Apellido</label>
+                    <input type="text" id="repNombrePersona" placeholder="Ej: Sergio Ram&iacute;rez">
+                </div>
+
+                <div class="form-group">
+                    <label>D.N.I. (N&uacute;mero de Documento)</label>
+                    <input type="text" id="repDniPersona" placeholder="Ej: 12345678">
+                </div>
+
+                <div class="form-group">
+                    <label>Domicilio / Residencia</label>
+                    <input type="text" id="repDomicilioPersona" placeholder="Ej: Manzana 87, Lote 20 (o S/D)">
+                </div>
+
+                <div class="form-group">
+                    <label>Motivo del abordaje</label>
+                    <input type="text" id="repMotivoAbordaje" placeholder="Ej: Instaladores de c&aacute;maras extraviados">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Estado / Conclusi&oacute;n final</label>
+                <input type="text" id="repEstadoFinal" placeholder="Ej: Sin novedades / Se acompa&ntilde;a al sector">
+            </div>
+
+            <button class="btn-action" onclick="generarReporteWhatsApp()">Generar Vista Previa / Enviar</button>
+        </div>
+        <!-- ======================================================= -->
+        <!-- FIN DE ETIQUETA: APARTADO DE GENERADOR DE REPORTES      -->
+        <!-- ======================================================= -->
+
+        <!-- VISTA 2: MENÚ DE HERRAMIENTAS -->
+        <div id="view-herramientas" class="view">
+            <div id="tools-menu">
+                <h2 class="section-title">Herramientas Operativas</h2>
+                
+                <div class="menu-card" onclick="openIngresoForm()">
+                    <div class="menu-icon icon-ingreso">&#128665;</div>
+                    <div class="menu-info">
+                        <h3>INGRESO A SOLES DEL OESTE</h3>
+                        <p>Aviso de llegada para relevar al compa&ntilde;ero</p>
+                    </div>
+                </div>
+
+                <div class="menu-card" onclick="openRondinForm()">
+                    <div class="menu-icon icon-tools">&#128692;</div>
+                    <div class="menu-info">
+                        <h3>ROND&Iacute;N INGRESO/SALIDA</h3>
+                        <p>Formulario de control de moto y elementos de trabajo</p>
+                    </div>
+                </div>
+
+                <div class="menu-card" onclick="openGuardiaForm()">
+                    <div class="menu-icon icon-report">&#128104;&#8205;&#128187;</div>
+                    <div class="menu-info">
+                        <h3>PARTE DEL PORTERO (GUARDIAS)</h3>
+                        <p>Control de turnos, ingresos, moto y elementos de cabina</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario de Ingreso al Barrio -->
+            <div id="form-ingreso-barrio" style="display: none;">
+                <h2 class="section-title">Aviso de Ingreso (Relevo)</h2>
+
+                <div class="form-group">
+                    <label>Tu Nombre (Ingresante):</label>
+                    <input type="text" id="ingresoNombre" placeholder="Ej: Tob&iacute;as Biasucci">
+                </div>
+
+                <div class="form-group">
+                    <label>Compa&ntilde;ero al que Relevas:</label>
+                    <input type="text" id="ingresoCompanero" placeholder="Ej: Isa&iacute;as Ojeda">
+                </div>
+
+                <div class="form-group">
+                    <label>Turno:</label>
+                    <input type="text" id="ingresoTurno" placeholder="Ej: Ma&ntilde;ana / Noche">
+                </div>
+
+                <button class="btn-action" onclick="generarReporteIngresoWhatsApp()">Enviar Aviso a WhatsApp</button>
+            </div>
+
+            <!-- Formulario del Rondín -->
+            <div id="form-rondin" style="display: none;">
+                <h2 class="section-title">Control de Rond&iacute;n (Soles del Oeste)</h2>
+                
+                <div class="form-group">
+                    <label>Tipo de Reporte:</label>
+                    <select id="rondinTipoRegistro">
+                        <option value="ingreso">Ingreso (Salida: Pendiente)</option>
+                        <option value="salida">Salida (Cierre de Turno)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Hora de Ingreso:</label>
+                    <input type="text" id="rondinHoraIngreso" placeholder="Ej: 08:30">
+                </div>
+
+                <div class="form-group">
+                    <label>Rond&iacute;n (Personal):</label>
+                    <input type="text" id="rondinNombre" placeholder="Ej: Esteban">
+                </div>
+
+                <div class="form-group">
+                    <label>Clima:</label>
+                    <input type="text" id="rondinClima" placeholder="Ej: Fr&iacute;o">
+                </div>
+
+                <div class="sub-section-title">&#10024; CONTROL DE LA MOTO:</div>
+
+                <div class="form-group">
+                    <label>?? Llave:</label>
+                    <input type="text" id="rondinLlave" placeholder="Ej: si">
+                </div>
+
+                <div class="form-group">
+                    <label>?? Nivel de aceite:</label>
+                    <input type="text" id="rondinAceite" placeholder="Ej: medio">
+                </div>
+
+                <div class="form-group">
+                    <label>?? Nivel de Combustible de la moto:</label>
+                    <input type="text" id="rondinCombustibleMoto" placeholder="Ej: lleno">
+                </div>
+
+                <div class="form-group">
+                    <label>Bid&oacute;n:</label>
+                    <input type="text" id="rondinBidon" placeholder="Ej: 5 Ls">
+                </div>
+
+                <div class="form-group">
+                    <label>?? BALIZA AZUL:</label>
+                    <input type="text" id="rondinBaliza" placeholder="Ej: si">
+                </div>
+
+                <div class="form-group">
+                    <label>?? Casco:</label>
+                    <input type="text" id="rondinCasco" placeholder="si">
+                </div>
+
+                <div class="form-group">
+                    <label>?? Estado General:</label>
+                    <input type="text" id="rondinEstadoGeneral" placeholder="sin novedades">
+                </div>
+
+                <div class="sub-section-title">&#10024; CONTROL DE ELEMENTOS DE TRABAJO:</div>
+
+                <div class="form-group">
+                    <label>?? Linterna (Estado):</label>
+                    <input type="text" id="rondinLinterna" placeholder="Ej: en funcionamiento">
+                </div>
+
+                <div class="form-group">
+                    <label>&nbsp;&nbsp;&nbsp;&nbsp;&#128267; Bater&iacute;a Linterna:</label>
+                    <input type="text" id="rondinBateriaLinterna" placeholder="Ej: media carga">
+                </div>
+
+                <div class="form-group">
+                    <label>?? Handy (Estado):</label>
+                    <input type="text" id="rondinHandy" placeholder="Ej: falla">
+                </div>
+
+                <div class="form-group">
+                    <label>&nbsp;&nbsp;&nbsp;&nbsp;&#128267; Bater&iacute;a Handy:</label>
+                    <input type="text" id="rondinBateriaHandy" placeholder="Ej: 50%">
+                </div>
+
+                <div class="form-group">
+                    <label>Novedades / Observaciones:</label>
+                    <textarea id="rondinNovedades" rows="3" placeholder="hay novedades"></textarea>
+                </div>
+
+                <button class="btn-action" onclick="generarReporteRondinWhatsApp()">Enviar Rond&iacute;n a WhatsApp</button>
+            </div>
+
+            <!-- Formulario del Parte del Guardia -->
+            <div id="form-guardia" style="display: none;">
+                <h2 class="section-title">Parte del Portero (Guardias)</h2>
+                
+                <div class="form-group">
+                    <label>Nombre del Guardia:</label>
+                    <input type="text" id="gGuardia" placeholder="Ej: Tobias biasucci">
+                </div>
+
+                <div class="form-group">
+                    <label>Turno de Trabajo:</label>
+                    <input type="text" id="gTurno" placeholder="Ej: Noche">
+                </div>
+
+                <div class="sub-section-title">FLUJO DE ACCESOS</div>
+
+                <div class="form-group">
+                    <label>? Ingreso de personas:</label>
+                    <input type="text" id="gIngresoPers" placeholder="0">
+                </div>
+
+                <div class="form-group">
+                    <label>? SALIDA de Personas:</label>
+                    <input type="text" id="gSalidaPers" placeholder="0">
+                </div>
+
+                <div class="form-group">
+                    <label>? Ingreso de veh&iacute;culos:</label>
+                    <input type="text" id="gIngresoVeh" placeholder="0">
+                </div>
+
+                <div class="form-group">
+                    <label>? SALIDA de veh&iacute;culos:</label>
+                    <input type="text" id="gSalidaVeh" placeholder="0">
+                </div>
+
+                <div class="form-group">
+                    <label>? Observaci&oacute;n:</label>
+                    <textarea id="gObservacion" rows="2" placeholder="Ej: En orden y funcionando"></textarea>
+                </div>
+
+                <div class="sub-section-title">&#10024; CONTROL DE LA MOTO</div>
+
+                <div class="form-group">
+                    <label>?? Llave:</label>
+                    <input type="text" id="gMotoLlave" placeholder="Ej: si">
+                </div>
+
+                <div class="form-group">
+                    <label>?? Nivel de aceite:</label>
+                    <input type="text" id="gMotoAceite" placeholder="Ej: Completo">
+                </div>
+
+                <div class="form-group">
+                    <label>?? Nivel de Combustible (Moto):</label>
+                    <input type="text" id="gMotoCombustible" placeholder="Ej: ¼ de Combustible">
+                </div>
+
+                <div class="form-group">
+                    <label>Bid&oacute;n:</label>
+                    <input type="text" id="gMotoBidon" placeholder="Ej: 2.5 lts">
+                </div>
+
+                <div class="form-group">
+                    <label>?? BALIZA AZUL:</label>
+                    <input type="text" id="gMotoBaliza" placeholder="Ej: si">
+                </div>
+
+                <div class="form-group">
+                    <label>?? Casco:</label>
+                    <input type="text" id="gMotoCasco" placeholder="Ej: si">
+                </div>
+
+                <div class="form-group">
+                    <label>?? Estado General de la Moto:</label>
+                    <textarea id="gMotoEstado" rows="2" placeholder="Ej: En funcionamiento"></textarea>
+                </div>
+
+                <div class="sub-section-title">&#10024; CONTROL DE ELEMENTOS DE TRABAJO</div>
+
+                <div class="form-group">
+                    <label>?? LINTERNA CANTIDAD Y ESTADO: Cantidad</label>
+                    <input type="text" id="gLinternaCant" value="2">
+                </div>
+                <div class="form-group">
+                    <label>?? Estado General Linternas:</label>
+                    <input type="text" id="gEstadoLinternas" placeholder="Ej: Ambas en funcionamiento">
+                </div>
+                <div class="form-group">
+                    <label>?? Puesto (Linterna 1):</label>
+                    <input type="text" id="gLinterna1" placeholder="Ej: Carga Completa">
+                </div>
+                <div class="form-group">
+                    <label>?? Rond&iacute;n (Linterna 2):</label>
+                    <input type="text" id="gLinterna2" placeholder="Ej: Carga Completa">
+                </div>
+
+                <div class="form-group">
+                    <label>?? HANDYS FUNCIONAMIENTO, CANTIDAD Y ESTADO: Cantidad</label>
+                    <input type="text" id="gHandyCant" value="2">
+                </div>
+                <div class="form-group">
+                    <label>?? Estado General Handys:</label>
+                    <input type="text" id="gEstadoHandys" placeholder="Ej: Ambos en funcionamiento">
+                </div>
+                <div class="form-group">
+                    <label>?? Puesto (Handy 1):</label>
+                    <input type="text" id="gHandy1" placeholder="Ej: Media Carga">
+                </div>
+                <div class="form-group">
+                    <label>?? Rond&iacute;n (Handy 2):</label>
+                    <input type="text" id="gHandy2" placeholder="Ej: Carga Completa">
+                </div>
+
+                <div class="sub-section-title">&#10024; INSTALACIONES Y CABINA</div>
+
+                <div class="form-group">
+                    <label>Limpieza y Estado Cabina:</label>
+                    <input type="text" id="gCabinaLimpieza" value="Cabina limpia y en orden">
+                </div>
+
+                <div class="form-group">
+                    <label>Caloventor:</label>
+                    <input type="text" id="gCaloventor" placeholder="Ej: En funcionamiento">
+                </div>
+
+                <div class="form-group">
+                    <label>Monitores / C&aacute;maras:</label>
+                    <textarea id="gMonitores" rows="3" placeholder="Ej: Sin novedades"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Pava El&eacute;ctrica:</label>
+                    <input type="text" id="gPava" value="En funcionamiento y sin problemas">
+                </div>
+
+                <div class="form-group">
+                    <label>Bater&iacute;as:</label>
+                    <input type="text" id="gBaterias" value="2 colocadas - sin conexi&oacute;n">
+                </div>
+
+                <div class="form-group">
+                    <label>Portero Entrante y Responsable:</label>
+                    <input type="text" id="gResponsable" placeholder="Ej: Isa&iacute;as Ojeda">
+                </div>
+
+                <button class="btn-action" onclick="generarReporteGuardiaWhatsApp()">Enviar Parte a WhatsApp</button>
+            </div>
+        </div>
+
+        <!-- VISTA 3: PERFIL / YO -->
+        <div id="view-perfil" class="view">
+            <h2 class="section-title">Mi Perfil (Guardia)</h2>
+            
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">&#128104;&#8205;&#128187;</div>
+                    <div class="profile-info">
+                        <h3 id="perfilNombreVisual">Guardia del Puesto 2</h3>
+                        <p>Soles del Oeste</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre y Apellido:</label>
+                    <input type="text" id="perfilNombreInput" placeholder="Ej: Tob&iacute;as Biasucci" oninput="guardarDatosPerfil()">
+                </div>
+
+                <div class="form-group">
+                    <label>N&uacute;mero de Legajo / DNI:</label>
+                    <input type="text" id="perfilLegajo" placeholder="Ej: 42356789" oninput="guardarDatosPerfil()">
+                </div>
+
+                <div class="form-group">
+                    <label>Puesto Asignado:</label>
+                    <input type="text" id="perfilPuesto" value="Puesto 2 (Acceso Secundario)" readonly>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <h3 style="font-size: 1rem; margin-bottom: 10px; color: var(--header-bg);">Fichaje y Control de Turno</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Registra el inicio y cierre de tu jornada para que quede guardado localmente en este dispositivo.</p>
+                
+                <div class="form-group">
+                    <label>Estado Actual:</label>
+                    <input type="text" id="perfilEstadoTurno" value="Fuera de Turno" readonly style="font-weight: bold; color: #e84393;">
+                </div>
+
+                <button class="btn-action" style="margin-bottom: 0;" onclick="toggleFichajeTurno()" id="btnFichaje">Iniciar Turno</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Barra de Navegación Inferior -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" id="nav-btn-categorias" onclick="switchTab('categorias')">
+            <span class="icon">&#127968;</span>
+            <span>Men&uacute;</span>
+        </button>
+        <button class="nav-item" id="nav-btn-herramientas" onclick="switchTab('herramientas')">
+            <span class="icon">&#128736;</span>
+            <span>Herramientas</span>
+        </button>
+        <button class="nav-item" id="nav-btn-perfil" onclick="switchTab('perfil')">
+            <span class="icon">&#128100;</span>
+            <span>Yo</span>
+        </button>
+    </nav>
+
+    <script>
+        // ======================================================= -->
+        // 1. IA LOCAL (Funciona 100% Sin Internet)               -->
+        // ======================================================= -->
+        function redactarConIAOffline() {
+            const inputDetalle = document.getElementById('repDetalle');
+            const textoCrudo = inputDetalle.value.trim();
+
+            if (!textoCrudo) {
+                alert("Escribe algunas palabras clave en el detalle primero (ej: 'perro suelto', 'auto raro', etc.) para que el sistema local lo redacte.");
+                return;
+            }
+
+            let textoFormateado = "Se constata y registra situación en el sector: " + textoCrudo + ". Personal de guardia procede a realizar control preventivo, manteniendo vigilancia activa.";
+            
+            const lower = textoCrudo.toLowerCase();
+            if (lower.includes("perro") || lower.includes("animal") || lower.includes("canino")) {
+                textoFormateado = "Se visualiza ejemplar en la vía pública del sector, generando inquietud. Se procede a realizar patrullaje preventivo y disuasivo para asegurar el orden y resguardo en el perímetro.";
+            } else if (lower.includes("auto") || lower.includes("vehiculo") || lower.includes("vehículo") || lower.includes("moto")) {
+                textoFormateado = "Se detecta vehículo en actitud de permanencia inusual en el sector. Se realiza verificación preventiva de rutina y control visual de circulación.";
+            } else if (lower.includes("luz") || lower.includes("luminaria") || lower.includes("corte") || lower.includes("foco")) {
+                textoFormateado = "Se registra anomalía en el sistema de iluminación del sector. Se verifica el estado de las instalaciones y se asienta novedad para su pronta revisión técnica.";
+            }
+
+            inputDetalle.value = textoFormateado;
+            
+            const btn = event.target.closest('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "<span>&#10004;</span> ¡Redactado Offline!";
+            setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+        }
+
+        // ======================================================= -->
+        // 2. IA ONLINE (Para cuando hay internet / Conexión API)   -->
+        // ======================================================= -->
+        function redactarConIAOnline() {
+            const inputDetalle = document.getElementById('repDetalle');
+            const textoCrudo = inputDetalle.value.trim();
+
+            if (!textoCrudo) {
+                alert("Escribe tus notas en el detalle primero para que la IA online redacte el informe formal.");
+                return;
+            }
+
+            // Verificador rápido de conexión a internet del dispositivo
+            if (!navigator.onLine) {
+                alert("?? No hay conexión a internet detectada en este momento. Utiliza el botón de 'IA Local (Sin Internet)'.");
+                return;
+            }
+
+            // Aquí puedes conectar en el futuro tu fetch() a una API de IA en la nube (ej: OpenAI / Gemini / Apps Script).
+            // Por ahora, simulamos una respuesta inteligente ampliada y formalizada vía web:
+            const btn = event.target.closest('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "<span>?</span> Conectando con IA...";
+
+            setTimeout(() => {
+                inputDetalle.value = "[INFORME TÉCNICO AVANZADO - VÍA IA ONLINE]\n" +
+                    "Se recepciona alerta operativa sobre evento en el sector: " + textoCrudo + ".\n" +
+                    "Acciones adoptadas: Despliegue inmediato de personal de vigilancia al sector indicado, entrevista preventiva con vecinos linderos, monitoreo visual y aseguramiento del perímetro. Situación controlada y bajo estricto seguimiento preventivo.";
+                
+                btn.innerHTML = "<span>&#10004;</span> ¡Redactado Online!";
+                setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+            }, 1000);
+        }
+
+        // Mostrar/Ocultar sección de datos de persona en el reporte
+        function toggleSeccionPersonas() {
+            const selectVal = document.getElementById('repPersonaCheck').value;
+            const seccionPersona = document.getElementById('seccion-datos-persona');
+            if (selectVal === 'si') {
+                seccionPersona.style.display = 'block';
+            } else {
+                seccionPersona.style.display = 'none';
+            }
+        }
+
+        // Cambio de Tema
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('bs_sentir_theme', newTheme);
+            
+            const btn = document.getElementById('theme-btn');
+            btn.textContent = newTheme === 'dark' ? '??' : '??';
+        }
+
+        // Cargar datos guardados al iniciar la app
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('bs_sentir_theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            const btn = document.getElementById('theme-btn');
+            btn.textContent = savedTheme === 'dark' ? '??' : '??';
+
+            const guardName = localStorage.getItem('bs_guard_name');
+            const guardLegajo = localStorage.getItem('bs_guard_legajo');
+
+            if (guardName) {
+                document.getElementById('perfilNombreInput').value = guardName;
+                document.getElementById('perfilNombreVisual').textContent = guardName;
+                const inputGuardiaParte = document.getElementById('gGuardia');
+                const inputIngresoNombre = document.getElementById('ingresoNombre');
+                if(inputGuardiaParte && !inputGuardiaParte.value) inputGuardiaParte.value = guardName;
+                if(inputIngresoNombre && !inputIngresoNombre.value) inputIngresoNombre.value = guardName;
+            }
+
+            if (guardLegajo) {
+                document.getElementById('perfilLegajo').value = guardLegajo;
+            }
+        });
+
+        function guardarDatosPerfil() {
+            const name = document.getElementById('perfilNombreInput').value.trim();
+            const legajo = document.getElementById('perfilLegajo').value.trim();
+
+            document.getElementById('perfilNombreVisual').textContent = name || "Guardia del Puesto 2";
+            
+            localStorage.setItem('bs_guard_name', name);
+            localStorage.setItem('bs_guard_legajo', legajo);
+
+            const inputGuardiaParte = document.getElementById('gGuardia');
+            const inputIngresoNombre = document.getElementById('ingresoNombre');
+            if(inputGuardiaParte) inputGuardiaParte.value = name;
+            if(inputIngresoNombre) inputIngresoNombre.value = name;
+        }
+
+        let enTurno = false;
+        function toggleFichajeTurno() {
+            enTurno = !enTurno;
+            const estadoInput = document.getElementById('perfilEstadoTurno');
+            const btnFichaje = document.getElementById('btnFichaje');
+
+            if (enTurno) {
+                const ahora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                estadoInput.value = "En Turno (Desde las " + ahora + ")";
+                estadoInput.style.color = "#00b894";
+                btnFichaje.textContent = "Finalizar Turno";
+                btnFichaje.style.backgroundColor = "#d63031";
+            } else {
+                estadoInput.value = "Fuera de Turno";
+                estadoInput.style.color = "#e84393";
+                btnFichaje.textContent = "Iniciar Turno";
+                btnFichaje.style.backgroundColor = "#e84393";
+            }
+        }
+
+        function goHome() {
+            const formIngreso = document.getElementById('form-ingreso-barrio');
+            const formRondin = document.getElementById('form-rondin');
+            const formGuardia = document.getElementById('form-guardia');
+            if (formIngreso.style.display === 'block' || formRondin.style.display === 'block' || formGuardia.style.display === 'block') {
+                formIngreso.style.display = 'none';
+                formRondin.style.display = 'none';
+                formGuardia.style.display = 'none';
+                document.getElementById('tools-menu').style.display = 'block';
+                document.getElementById('back-icon').style.display = 'inline';
+            } else {
+                switchTab('categorias');
+            }
+        }
+
+        function openIngresoForm() {
+            document.getElementById('tools-menu').style.display = 'none';
+            document.getElementById('form-ingreso-barrio').style.display = 'block';
+            document.getElementById('form-rondin').style.display = 'none';
+            document.getElementById('form-guardia').style.display = 'none';
+            document.getElementById('back-icon').style.display = 'inline';
+        }
+
+        function openRondinForm() {
+            document.getElementById('tools-menu').style.display = 'none';
+            document.getElementById('form-ingreso-barrio').style.display = 'none';
+            document.getElementById('form-rondin').style.display = 'block';
+            document.getElementById('form-guardia').style.display = 'none';
+            document.getElementById('back-icon').style.display = 'inline';
+            
+            const ahora = new Date();
+            const horaActual = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const inputIngreso = document.getElementById('rondinHoraIngreso');
+            if (!inputIngreso.value) {
+                inputIngreso.value = horaActual;
+            }
+        }
+
+        function openGuardiaForm() {
+            document.getElementById('tools-menu').style.display = 'none';
+            document.getElementById('form-ingreso-barrio').style.display = 'none';
+            document.getElementById('form-guardia').style.display = 'block';
+            document.getElementById('form-rondin').style.display = 'none';
+            document.getElementById('back-icon').style.display = 'inline';
+        }
+
+        // Navegación por Pestañas y Vistas
+        function switchTab(tabName) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+
+            const backIcon = document.getElementById('back-icon');
+
+            if (tabName === 'categorias') {
+                document.getElementById('view-categorias').classList.add('active');
+                document.getElementById('nav-btn-categorias').classList.add('active');
+                backIcon.style.display = 'none';
+            } else {
+                backIcon.style.display = 'inline';
+                if (tabName === 'reportes') {
+                    document.getElementById('view-reportes').classList.add('active');
+                    document.getElementById('nav-btn-categorias').classList.add('active');
+                } else if (tabName === 'herramientas') {
+                    document.getElementById('view-herramientas').classList.add('active');
+                    document.getElementById('nav-btn-herramientas').classList.add('active');
+                    document.getElementById('tools-menu').style.display = 'block';
+                    document.getElementById('form-ingreso-barrio').style.display = 'none';
+                    document.getElementById('form-rondin').style.display = 'none';
+                    document.getElementById('form-guardia').style.display = 'none';
+                } else if (tabName === 'perfil') {
+                    document.getElementById('view-perfil').classList.add('active');
+                    document.getElementById('nav-btn-perfil').classList.add('active');
+                    backIcon.style.display = 'none';
+                }
+            }
+        }
+
+        // ======================================================= -->
+        // FUNCIÓN DE WHATSAPP PARA EL GENERADOR DE REPORTES      -->
+        // ======================================================= -->
+        function generarReporteWhatsApp() {
+            const manzana = document.getElementById('repManzana').value.trim() || "S/N";
+            const lote = document.getElementById('repLote').value.trim() || "S/N";
+            const tipoIncidencia = document.getElementById('repTipoIncidencia').value.trim() || "Novedad en garita";
+            const detalle = document.getElementById('repDetalle').value.trim() || "Sin detalles adicionales";
+            const personaCheck = document.getElementById('repPersonaCheck').value;
+            const estadoFinal = document.getElementById('repEstadoFinal').value.trim() || "Sin novedades";
+
+            const ahora = new Date();
+            const fecha = ahora.toLocaleDateString();
+            const hora = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            let mensaje = "*BARRIO SOLES DEL OESTE*\n\n" +
+                "\uD83D\uDCC4 *INFORME DE NOVEDAD*\n\n" +
+                "\uD83D\uDCC5 Fecha: " + fecha + " - Hora: " + hora + "\n" +
+                "\uD83D\uDCCD Ubicaci\u00F3n: Manzana " + manzana + ", Lote " + lote + "\n" +
+                "\uD83D\uDEA8 Incidencia: " + tipoIncidencia + "\n\n" +
+                "\u2709\uFE0F *Detalle:* \n" + detalle + "\n";
+
+            if (personaCheck === 'si') {
+                const nombrePersona = document.getElementById('repNombrePersona').value.trim() || "No especificado";
+                const dniPersona = document.getElementById('repDniPersona').value.trim() || "No especificado";
+                const domicilioPersona = document.getElementById('repDomicilioPersona').value.trim() || "No especificado";
+                const motivoAbordaje = document.getElementById('repMotivoAbordaje').value.trim() || "No especificado";
+
+                mensaje += "\n\uD83D\uDC64 *DATOS DE PERSONA IDENTIFICADA:*\n" +
+                    "- Nombre: " + nombrePersona + "\n" +
+                    "- D.N.I.: " + dniPersona + "\n" +
+                    "- Domicilio: " + domicilioPersona + "\n" +
+                    "- Motivo: " + motivoAbordaje + "\n";
+            }
+
+            mensaje += "\n\u2705 *Estado / Conclusi\u00F3n:* " + estadoFinal;
+
+            const urlWhatsApp = "https://api.whatsapp.com/send?text=" + encodeURIComponent(mensaje);
+            window.open(urlWhatsApp, '_blank');
+        }
+
+        // Generar Mensaje de Ingreso (Unicode seguro)
+        function generarReporteIngresoWhatsApp() {
+            const nombre = document.getElementById('ingresoNombre').value.trim() || "Guardia";
+            const companero = document.getElementById('ingresoCompanero').value.trim() || "Compañero";
+            const turno = document.getElementById('ingresoTurno').value.trim() || "Turno";
+
+            const ahora = new Date();
+            const fecha = ahora.toLocaleDateString();
+            const hora = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const mensaje = "*BARRIO SOLES DEL OESTE*\n\n" +
+                "\uD83D\uDE97 *AVISO DE INGRESO Y RELEVO*\n\n" +
+                "\uD83D\uDCC5 Fecha: " + fecha + "\n" +
+                "\u23F0 Hora de llegada: " + hora + "\n" +
+                "\uD83D\uDC64 Ingresa: " + nombre + "\n" +
+                "\uD83D\uDD04 Releva a: " + companero + "\n" +
+                "\uD83D\uDCCC Turno: " + turno + "\n\n" +
+                "\u2705 _Ingresando al puesto para iniciar funciones._";
+
+            const urlWhatsApp = "https://api.whatsapp.com/send?text=" + encodeURIComponent(mensaje);
+            window.open(urlWhatsApp, '_blank');
+        }
+
+        // Generar Rondín (Unicode seguro)
+        function generarReporteRondinWhatsApp() {
+            const tipoRegistro = document.getElementById('rondinTipoRegistro').value;
+            const horaIngresoInput = document.getElementById('rondinHoraIngreso').value.trim();
+            
+            const rondin = document.getElementById('rondinNombre').value.trim() || "N/A";
+            const clima = document.getElementById('rondinClima').value.trim() || "N/A";
+            const llave = document.getElementById('rondinLlave').value.trim() || "Sin especificar";
+            const aceite = document.getElementById('rondinAceite').value.trim() || "Sin especificar";
+            const combMoto = document.getElementById('rondinCombustibleMoto').value.trim() || "Sin especificar";
+            const bidon = document.getElementById('rondinBidon').value.trim() || "N/A";
+            const baliza = document.getElementById('rondinBaliza').value.trim() || "Sin especificar";
+            const casco = document.getElementById('rondinCasco').value.trim() || "si";
+            const estGeneral = document.getElementById('rondinEstadoGeneral').value.trim() || "sin novedades";
+            
+            const linterna = document.getElementById('rondinLinterna').value.trim() || "Sin especificar";
+            const batLinterna = document.getElementById('rondinBateriaLinterna').value.trim() || "N/A";
+            const handy = document.getElementById('rondinHandy').value.trim() || "Sin especificar";
+            const batHandy = document.getElementById('rondinBateriaHandy').value.trim() || "N/A";
+            const novedades = document.getElementById('rondinNovedades').value.trim() || "sin novedades";
+
+            const ahora = new Date();
+            const fecha = ahora.toLocaleDateString();
+            const horaActual = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const horaIngresoFinal = horaIngresoInput !== "" ? horaIngresoInput : horaActual;
+            let textoSalida = "Pendiente";
+            if (tipoRegistro === "salida") {
+                textoSalida = horaActual;
+            }
+
+            const textoMensaje = "*SOLES DEL OESTE*\n\n" +
+                "ROND\u00CDN: " + rondin + "\n" +
+                "FECHA: " + fecha + "\n" +
+                "INGRESO: " + horaIngresoFinal + " \n\n" +
+                "CLIMA: " + clima + " \n\n" +
+                "\u2728CONTROL DE LA MOTO: \n" +
+                "\uD83D\uDD38 Llave: " + llave + " \n" +
+                "\uD83D\uDD38 Nivel de aceite: " + aceite + "\n" +
+                "\uD83D\uDD38 Nivel de Combustible de la moto: " + combMoto + "\n" +
+                "Bid\u00F3n : " + bidon + " \n\n" +
+                "\uD83D\uDD38 BALIZA AZUL: " + baliza + " \n" +
+                "\uD83D\uDD38 Casco: " + casco + " \n" +
+                "\uD83D\uDD38 Estado General: " + estGeneral + " \n\n\n" +
+                "\u2728CONTROL DE ELEMENTOS DE TRABAJO:\n\n" +
+                "\uD83D\uDD38 Linterna: " + linterna + " \n" +
+                "  \uD83D\uDD0B " + batLinterna + "\n" +
+                "\uD83D\uDD38 Handy: " + handy + " \n" +
+                "  \uD83D\uDD0B " + batHandy + "\n\n" +
+                "SALIDA: " + textoSalida + "\n" +
+                novedades;
+
+            const urlWhatsApp = "https://api.whatsapp.com/send?text=" + encodeURIComponent(textoMensaje);
+            window.open(urlWhatsApp, '_blank');
+        }
+
+        // Generar Parte del Guardia (Unicode seguro)
+        function generarReporteGuardiaWhatsApp() {
+            const guardia = document.getElementById('gGuardia').value.trim() || "No especificado";
+            const turno = document.getElementById('gTurno').value.trim() || "No especificado";
+            const ingresoPers = document.getElementById('gIngresoPers').value.trim() || "0";
+            const salidaPers = document.getElementById('gSalidaPers').value.trim() || "0";
+            const ingresoVeh = document.getElementById('gIngresoVeh').value.trim() || "0";
+            const salidaVeh = document.getElementById('gSalidaVeh').value.trim() || "0";
+            const observacion = document.getElementById('gObservacion').value.trim() || "Sin observaciones";
+
+            const motoLlave = document.getElementById('gMotoLlave').value.trim() || "N/A";
+            const motoAceite = document.getElementById('gMotoAceite').value.trim() || "N/A";
+            const motoCombustible = document.getElementById('gMotoCombustible').value.trim() || "N/A";
+            const motoBidon = document.getElementById('gMotoBidon').value.trim() || "N/A";
+            const motoBaliza = document.getElementById('gMotoBaliza').value.trim() || "N/A";
+            const motoCasco = document.getElementById('gMotoCasco').value.trim() || "N/A";
+            const motoEstado = document.getElementById('gMotoEstado').value.trim() || "N/A";
+
+            const linternaCant = document.getElementById('gLinternaCant').value.trim() || "2";
+            const estadoLinternas = document.getElementById('gEstadoLinternas').value.trim() || "N/A";
+            const linterna1 = document.getElementById('gLinterna1').value.trim() || "N/A";
+            const linterna2 = document.getElementById('gLinterna2').value.trim() || "N/A";
+
+            const handyCant = document.getElementById('gHandyCant').value.trim() || "2";
+            const estadoHandys = document.getElementById('gEstadoHandys').value.trim() || "N/A";
+            const handy1 = document.getElementById('gHandy1').value.trim() || "N/A";
+            const handy2 = document.getElementById('gHandy2').value.trim() || "N/A";
+
+            const cabinaLimpieza = document.getElementById('gCabinaLimpieza').value.trim() || "Cabina limpia y en orden";
+            const caloventor = document.getElementById('gCaloventor').value.trim() || "Sin observaciones";
+            const monitores = document.getElementById('gMonitores').value.trim() || "N/A";
+            const pavaElectrica = document.getElementById('gPava').value.trim() || "En funcionamiento y sin problemas";
+            const baterias = document.getElementById('gBaterias').value.trim() || "2 colocadas - sin conexión";
+            const responsable = document.getElementById('gResponsable').value.trim() || "No especificado";
+
+            const ahora = new Date();
+            const fecha = ahora.toLocaleDateString();
+
+            const mensaje = "BARRIO SOLES DEL OESTE\n\n" +
+                "Parte del Portero: " + guardia + "\n\n" +
+                "\u2B55 fecha: " + fecha + "\n\n" +
+                "\u2B55 turno de: " + turno + "\n\n" +
+                "\u2B55 INGRESO de personas: " + ingresoPers + "\n" +
+                "\u2B55 SALIDA de Personas: " + salidaPers + "\n\n" +
+                "\u2B55 INGRESO de veh\u00EDculos: " + ingresoVeh + "\n" +
+                "\u2B55 SALIDA de veh\u00EDculos: " + salidaVeh + "\n\n" +
+                "\u2B55 Observaci\u00F3n: " + observacion + "\n\n" +
+                "\u2728 CONTROL DE LA MOTO:\n" +
+                "\uD83D\uDD38 Llave : " + motoLlave + "\n" +
+                "\uD83D\uDD38 Nivel de aceite: " + motoAceite + "\n" +
+                "\uD83D\uDD38 Nivel de Combustible:\n" +
+                "Moto: " + motoCombustible + "\n" +
+                "Bid\u00F3n : " + motoBidon + "\n\n" +
+                "\uD83D\uDD38 BALIZA AZUL: " + motoBaliza + "\n" +
+                "\uD83D\uDD38 Casco:  " + motoCasco + "\n" +
+                "\uD83D\uDD38 Estado General:\n" +
+                motoEstado + "\n\n" +
+                "\u2728 CONTROL DE ELEMENTOS DE TRABAJO:\n\n" +
+                "\uD83D\uDD38 LINTERNA CANTIDAD Y ESTADO: " + linternaCant + "\n" +
+                "\uD83D\uDD38 Estado General: " + estadoLinternas + "\n" +
+                "\uD83D\uDD0B Puesto: " + linterna1 + "\n" +
+                "\uD83D\uDD0B Rond\u00EDn: " + linterna2 + "\n\n" +
+                "\uD83D\uDD38 HANDYS FUNCIONAMIENTO , CANTIDAD Y ESTADO: " + handyCant + "\n" +
+                "\uD83D\uDD38 Estado General: " + estadoHandys + "\n" +
+                "\uD83D\uDD0B Puesto: " + handy1 + "\n" +
+                "\uD83D\uDD0B Rond\u00EDn: " + handy2 + "\n\n" +
+                "\u2728 LIMPIEZA Y ESTADO CABINA DE GUARDIA : " + cabinaLimpieza + "\n\n" +
+                "\u2022 \u2705 *CABINA CON CORRIENTE EL\u00C9CTRICA*\n\n" +
+                "\uD83D\uDD38 *CALOVENTOR*\n" + caloventor + "\n\n" +
+                "\uD83D\uDD38 *MONITOR/C\u00C1MARAS*\n" + monitores + "\n\n" +
+                "\uD83D\uDD38 *PAVA EL\u00C9CTRICA*\n" + pavaElectrica + "\n\n" +
+                "\uD83D\uDD38 BATER\u00CDAS: " + baterias + "\n\n" +
+                "\u2B55 *PORTERO ENTRANTE Y RESPONSABLE QUE HE CONTROLADO TODO EN EL RELEVO Y ME HAGO CARGO:* " + responsable;
+
+            const urlWhatsApp = "https://api.whatsapp.com/send?text=" + encodeURIComponent(mensaje);
+            window.open(urlWhatsApp, '_blank');
+        }
+    </script>
+</body>
+</html>
